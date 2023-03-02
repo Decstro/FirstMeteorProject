@@ -1,11 +1,20 @@
 import React from 'react';
-import { Hello } from './Hello.jsx';
-import { Info } from './Info.jsx';
+import { useTracker } from 'meteor/react-meteor-data';
+import { TasksCollection } from '/imports/api/TasksCollection';
+import { Task } from './Task';
 
-export const App = () => (
-  <div>
-    <h1>My First Meteor App!</h1>
-    <Hello/>
-    <Info/>
-  </div>
-);
+export const App = () => {
+  const tasks = useTracker(() => TasksCollection.find({}).fetch());
+
+  return (
+    <div>
+      <h1>To Do List</h1>
+
+      <ul>
+        {tasks.map(task => (
+          <Task key={task._id} task={task} />
+        ))}
+      </ul>
+    </div>
+  );
+};
